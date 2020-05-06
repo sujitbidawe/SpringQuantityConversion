@@ -1,5 +1,8 @@
 package com.bl.quantityconversion.service;
 
+import com.bl.quantityconversion.model.QuantityDTO;
+import com.bl.quantityconversion.model.QuantityType;
+import com.bl.quantityconversion.model.QuantityUnit;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,19 +14,35 @@ public class QuantityConversionImpl implements IQuantityConversionService{
 
     @Override
     public List<QuantityType> getQuantity() {
-        List<QuantityType> quantityTypes = Arrays.asList(QuantityType.values());
-        return quantityTypes;
+        return Arrays.asList(QuantityType.values());
     }
 
     @Override
-    public List<Unit> getUnit(QuantityType quantityType) {
-        List<Unit> unitAll = Arrays.asList(Unit.values());
-        List<Unit> unit  = new ArrayList<>();
-        for (Unit element : unitAll) {
+    public List<QuantityUnit> getUnits(QuantityType quantityType) {
+        QuantityUnit[] unitAll = QuantityUnit.values();
+        List<QuantityUnit> unit  = new ArrayList();
+        for (QuantityUnit element : unitAll) {
             if (element.quantityType == quantityType) {
                 unit.add(element);
             }
         }
         return unit;
+    }
+
+    @Override
+    public QuantityDTO convert(QuantityDTO quantity1, QuantityUnit desiredUnit) throws QuantityException {
+        if(!quantity1.getUnit().quantityType.equals(desiredUnit.quantityType)) {
+            throw new QuantityException(QuantityException.ExceptionType.DIFFERENT_QUANTITY_TYPE, "Different type of quantities");
+        }
+        if(quantity1.getUnit().equals(QuantityUnit.FAHRENHEIT)){
+            return new QuantityDTO(desiredUnit,
+                    (quantity1.getValue() - 32 ) * quantity1.getUnit().baseUnitComparison);
+        }
+        if(quantity1.getUnit().equals(QuantityUnit.CELSIUS)){
+            return new QuantityDTO(desiredUnit,
+                    (quantity1.getValue() * quantity1.getUnit().baseUnitComparison ) + 32.0 );
+        }
+        double valueInBaseUnit = quantity1.getValue() * quantity1.getUnit().baseUnitComparison;
+        return new QuantityDTO (desiredUnit, valueInBaseUnit / desiredUnit.baseUnitComparison);
     }
 }
