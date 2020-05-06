@@ -1,13 +1,14 @@
-package com.bl.quantityconversion.Controller;
+package com.bl.quantityconversion.controller;
 
+import com.bl.quantityconversion.model.QuantityDTO;
 import com.bl.quantityconversion.service.IQuantityConversionService;
-import com.bl.quantityconversion.service.QuantityType;
+import com.bl.quantityconversion.service.QuantityException;
+import com.bl.quantityconversion.model.QuantityType;
+import com.bl.quantityconversion.model.QuantityUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class QuantityConversionController {
@@ -21,8 +22,13 @@ public class QuantityConversionController {
     }
 
     @PostMapping("/getUnit")
-    public ResponseEntity getUnit(QuantityType qType){
-        QuantityType quantityType = qType;
-        return new ResponseEntity(quantityConversionService.getUnit(quantityType), HttpStatus.OK);
+    public ResponseEntity getUnits(QuantityType quantityType){
+        return new ResponseEntity(quantityConversionService.getUnits(quantityType), HttpStatus.OK);
+    }
+
+    @PostMapping("/getConversion/{desiredUnit}")
+    public ResponseEntity getConversion(@RequestBody QuantityDTO quantity1, @PathVariable QuantityUnit desiredUnit)
+                                        throws QuantityException {
+        return new ResponseEntity(quantityConversionService.convert(quantity1, desiredUnit), HttpStatus.OK);
     }
 }
