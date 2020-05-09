@@ -16,17 +16,17 @@ public class QuantityConversionController {
     @Autowired
     IQuantityConversionService quantityConversionService;
 
-    @GetMapping("/getQuantity")
+    @GetMapping("/quantity")
     public ResponseEntity getQuantityType(){
         return new ResponseEntity(quantityConversionService.getQuantity(), HttpStatus.OK);
     }
 
-    @PostMapping("/getUnit")
-    public ResponseEntity getUnits(QuantityType quantityType){
+    @GetMapping("/unit")
+    public ResponseEntity getUnits(@RequestParam QuantityType quantityType){
         return new ResponseEntity(quantityConversionService.getUnits(quantityType), HttpStatus.OK);
     }
 
-    @PostMapping("/getConversion/{desiredUnit}")
+    @PostMapping("/convert/{desiredUnit}")
     public ResponseEntity getConversion(@RequestBody QuantityDTO quantity1, @PathVariable QuantityUnit desiredUnit)
                                         throws QuantityException {
         return new ResponseEntity(quantityConversionService.convert(quantity1, desiredUnit), HttpStatus.OK);

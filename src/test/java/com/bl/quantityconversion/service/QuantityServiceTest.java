@@ -1,7 +1,6 @@
 package com.bl.quantityconversion.service;
 
-import com.bl.quantityconversion.Controller.QuantityConversionController;
-import org.junit.jupiter.api.Test;
+import com.bl.quantityconversion.controller.QuantityConversionController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
