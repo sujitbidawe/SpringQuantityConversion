@@ -31,6 +31,11 @@ public class QuantityConversionImpl implements IQuantityConversionService{
 
     @Override
     public QuantityDTO convert(QuantityDTO quantity1, QuantityUnit desiredUnit) throws QuantityException {
+        if(quantity1.getValue() < 0.0
+                && !quantity1.getUnit().equals(QuantityUnit.FAHRENHEIT.quantityType )
+                && !quantity1.getUnit().equals(QuantityUnit.CELSIUS.quantityType )){
+            throw new QuantityException(QuantityException.ExceptionType.NEGATIVE_VALUE, "quantities cannot be negative");
+        }
         if(!quantity1.getUnit().quantityType.equals(desiredUnit.quantityType)) {
             throw new QuantityException(QuantityException.ExceptionType.DIFFERENT_QUANTITY_TYPE, "Different type of quantities");
         }
