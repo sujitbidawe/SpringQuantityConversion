@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class QuantityConversionController {
 
     @Autowired
@@ -21,8 +22,9 @@ public class QuantityConversionController {
         return new ResponseEntity(quantityConversionService.getQuantity(), HttpStatus.OK);
     }
 
-    @GetMapping("/unit")
-    public ResponseEntity getUnits(@RequestParam QuantityType quantityType){
+    @GetMapping("/unit/{quantityType}")
+    public ResponseEntity getUnits(@PathVariable QuantityType quantityType){
+        System.out.println("hit");
         return new ResponseEntity(quantityConversionService.getUnits(quantityType), HttpStatus.OK);
     }
 
